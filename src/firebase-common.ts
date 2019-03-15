@@ -64,6 +64,7 @@ export const firebase: any = {
     CUSTOM: "custom",
     FACEBOOK: "facebook",
     GOOGLE: "google",
+    TWITTER: "twitter",
     EMAIL_LINK: "emailLink"
   },
   LogComplexEventTypeParameter: {

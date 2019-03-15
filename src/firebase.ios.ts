@@ -1005,6 +1005,41 @@ firebase.login = arg => {
         CFRetain(delegate);
         sIn.delegate = delegate;
         sIn.signIn();
+      } else if (arg.type === firebase.LoginType.TWITTER) { 
+        if (typeof (TWTRLogInButton) === "undefined") {
+          reject("TwitterKit is not installed - see Podfile");
+          return;
+        }
+
+        // if (arg.twitterOptions && arg.twitterOptions.hostedDomain) {
+        //   sIn.hostedDomain = arg.googleOptions.hostedDomain;
+        // }
+
+        TWTRLogInButton.buttonWithLogInCompletion((session, error) => {
+          if (error === null && session) {
+            let token = session.authToken;
+            let secret = session.authTokenSecret;
+            const fIRAuthCredential = FIRTwitterAuthProvider.credentialWithTokenSecret(token, secret);
+
+            if (fAuth.currentUser) {
+              // link credential, note that you only want to do this if this user doesn't already use Twitter as an auth provider
+              const onCompletionLink = (user, error) => {
+                if (error) {
+                  // ignore, as this one was probably already linked, so just return the user
+                  fAuth.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential, onCompletionWithAuthResult);
+                } else {
+                  onCompletionWithAuthResult(user);
+                }
+              };
+              fAuth.currentUser.linkAndRetrieveDataWithCredentialCompletion(fIRAuthCredential, onCompletionLink);
+
+            } else {
+              fAuth.signInAndRetrieveDataWithCredentialCompletion(fIRAuthCredential, onCompletionWithAuthResult);
+            }
+          } else {
+            reject(error.localizedDescription);
+          }
+        });
       } else {
         reject("Unsupported auth type: " + arg.type);
       }

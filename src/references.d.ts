@@ -27,6 +27,9 @@
 /// <reference path="./platforms/ios/typings/objc!FirebaseMLNaturalLanguage.d.ts" />
 /// <reference path="./platforms/ios/typings/objc!FirebaseMLNLLanguageID.d.ts" />
 /// <reference path="./platforms/ios/typings/objc!FirebaseMLNLSmartReply.d.ts" />
+/// <reference path="./platforms/ios/typings/objc!Twitter.d.ts" />
+/// <reference path="./platforms/ios/typings/objc!TwitterCore.d.ts" />
+/// <reference path="./platforms/ios/typings/objc!TwitterKit.d.ts" />
 
 /// <reference path="./platforms/ios/typings/objc!TNSMLKitCamera.d.ts" />
 /// <reference path="./platforms/ios/typings/objc!TNSCrashlyticsLogger.d.ts" />

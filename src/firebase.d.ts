@@ -33,6 +33,11 @@ export enum LoginType {
    */
   GOOGLE,
   /**
+   * This requires you to setup Twitter Auth in the Firebase console,
+   * as well as uncommenting the SDK includes in include.gradle (Android) and Podfile (iOS).
+   */
+  TWITTER,
+  /**
    * This requires you to pass in the 'emailLinkOptions' as well.
    * Note that 'Firebase Dynamic Links' must be enabled for this login type to work.
    */
@@ -276,6 +281,13 @@ export interface FirebaseFacebookLoginOptions {
   scope?: string[];
 }
 
+export interface FirebaseTwitterLoginOptions {
+  /**
+   * TODO
+   */
+  notSure?: string;
+}
+
 export interface FirebaseCustomLoginOptions {
   /**
    * The JSON Web Token (JWT) to use for authentication.
@@ -305,6 +317,7 @@ export interface LoginOptions {
   phoneOptions?: FirebasePhoneLoginOptions;
   googleOptions?: FirebaseGoogleLoginOptions;
   facebookOptions?: FirebaseFacebookLoginOptions;
+  twitterOptions?: FirebaseTwitterLoginOptions;
   customOptions?: FirebaseCustomLoginOptions;
   ios?: LoginIOSOptions;
 
