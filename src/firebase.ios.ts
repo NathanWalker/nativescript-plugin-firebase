@@ -680,6 +680,10 @@ function toLoginResult(user, additionalUserInfo?: FIRAdditionalUserInfo): User {
       if (pid === 'facebook.com' && typeof (FBSDKAccessToken) !== "undefined") { // FIRFacebookAuthProviderID
         const fbCurrentAccessToken = FBSDKAccessToken.currentAccessToken();
         providers.push({id: pid, token: fbCurrentAccessToken ? fbCurrentAccessToken.tokenString : null});
+      } else if (pid === 'google.com' && typeof (GIDSignIn) !== "undefined" && GIDSignIn.sharedInstance() && GIDSignIn.sharedInstance().currentUser) {
+        // include web compatible oauth2 token
+        const gidCurrentAccessToken = GIDSignIn.sharedInstance().currentUser.authentication.accessToken;
+        providers.push({id: pid, token: gidCurrentAccessToken });
       } else {
         providers.push({id: pid});
       }
@@ -1005,8 +1009,8 @@ firebase.login = arg => {
         CFRetain(delegate);
         sIn.delegate = delegate;
         sIn.signIn();
-      } else if (arg.type === firebase.LoginType.TWITTER) { 
-        if (typeof (TWTRLogInButton) === "undefined") {
+      } else if (arg.type === firebase.LoginType.TWITTER) {
+        if (typeof (TWTRTwitter) === "undefined") {
           reject("TwitterKit is not installed - see Podfile");
           return;
         }
@@ -1014,8 +1018,7 @@ firebase.login = arg => {
         // if (arg.twitterOptions && arg.twitterOptions.hostedDomain) {
         //   sIn.hostedDomain = arg.googleOptions.hostedDomain;
         // }
-
-        TWTRLogInButton.buttonWithLogInCompletion((session, error) => {
+        TWTRTwitter.sharedInstance().logInWithViewControllerCompletion(arg.ios && arg.ios.controller ? arg.ios.controller : application.ios.rootController, (session, error) => {
           if (error === null && session) {
             let token = session.authToken;
             let secret = session.authTokenSecret;
